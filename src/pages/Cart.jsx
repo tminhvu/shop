@@ -141,12 +141,13 @@ const Button = styled.button`
     background-color: black;
     color: white;
     font-weight: 600;
+    cursor: pointer;
 `
 const Cart = () => {
     return (
         <Container>
-            <NavBar />
             <Announcement />
+            <NavBar />
             <Wrapper>
                 <Title> YOUR CART </Title>
                 <Top>

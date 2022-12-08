@@ -39,11 +39,34 @@ const Slide = styled.div`
     align-items: center;
     width: 100vw;
     height: 100vh;
+    position: relative;
     background-color: ${props => props.bg}
 `
 const ImageContainer = styled.div`
     height: 100%;
     flex: 1;
+    z-index: 3;
+`
+const Circle = styled.div`
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background-color: pink;
+    position: absolute;
+    top: 5%;
+    left: 7%;
+    z-index: -1;
+
+    &::after {
+        content: "";
+        width: 425px;
+        height: 425px;
+        border-radius: 50%;
+        background-color: teal;
+        position: absolute;
+        top: 8%;
+        left: 10%;
+    }
 `
 const Image = styled.img`
     height: 80%;
@@ -89,6 +112,7 @@ const Slider = () => {
             <Wrapper slideIndex={slideIndex}>
                 {sliderItems.map((item) => (
                     <Slide bg={item.bg} key={item.id}>
+                        <Circle/>
                         <ImageContainer>
                             <Image src={item.img}></Image>
                         </ImageContainer>

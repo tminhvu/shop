@@ -1,6 +1,8 @@
 import styled from "styled-components"
-import { Search, ShoppingCartOutlined} from '@material-ui/icons'
+import { Search, ShoppingCartOutlined } from '@material-ui/icons'
 import { Badge } from "@material-ui/core"
+import { Link } from "react-router-dom"
+import { linkStyle } from "../linkstyle.js"
 
 const Container = styled.div`
     height: 60px;
@@ -59,21 +61,31 @@ const NavBar = () => {
                     <Language>EN</Language>
                     <SearchContainter>
                         <Input />
-                        <Search style={{color: "gray", fontSize: 16}}/>
+                        <Search style={{ color: "gray", fontSize: 16 }} />
                     </SearchContainter>
                 </Left>
-                <Center><Logo>MONO</Logo></Center>
+                <Center>
+                    <Link to='/' style={linkStyle}>
+                        <Logo> MONO </Logo>
+                    </Link>
+                </Center>
                 <Right>
-                    <MenuItem>Register</MenuItem>
-                    <MenuItem>Sign in</MenuItem>
-                    <MenuItem>
-                        <Badge badgeContent={1} color="primary" overlap="rectangular">
-                            <ShoppingCartOutlined/>
-                        </Badge>
-                    </MenuItem>
+                    <Link to='/register' style={linkStyle}>
+                        <MenuItem>Register</MenuItem>
+                    </Link>
+                    <Link to='/login' style={linkStyle}>
+                        <MenuItem>Log in</MenuItem>
+                    </Link>
+                    <Link to='/cart' style={linkStyle}>
+                        <MenuItem>
+                            <Badge badgeContent={1} color="primary" overlap="rectangular">
+                                <ShoppingCartOutlined />
+                            </Badge>
+                        </MenuItem>
+                    </Link>
                 </Right>
             </Wrapper>
-        </Container>
+        </Container >
     )
 }
 

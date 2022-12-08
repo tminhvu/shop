@@ -1,4 +1,5 @@
 import { Add, RemoveOutlined } from "@material-ui/icons"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import Announcement from "../components/Announcement"
 import Footer from "../components/Footer"
@@ -105,11 +106,18 @@ const Button = styled.button`
         background-color: #e8e4e4;
     }
 `
-const Product = () => {
+const Product = ({category, filter, sort}) => {
+    const [products, setProducts] = useState([])
+    const [filteredProducts, setFilteredProducts] = useState([])
+
+    useEffect(() => {
+
+    }, [category])
+
     return (
         <Container>
-            <NavBar />
             <Announcement />
+            <NavBar />
             <Wrapper>
                 <ImageContainer>
                     <Image src={product.img} />
