@@ -7,15 +7,16 @@ import Login from "./pages/Login";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 const App = () => {
+
     return (
         <BrowserRouter>
             <Routes>
                 <Route exact path='/' element={<Home/>}/>
                 <Route path='product/:id' element={<Product/>}/>
+                <Route path='products/:category' element={<ProductList/>}/>
                 <Route path='cart' element={<Cart/>}/>
                 <Route path='register' element={<Register/>}/>
                 <Route path='login' element={<Login/>}/>
-                <Route path='productlist/:category' element={<ProductList/>}/>
             </Routes>
         </BrowserRouter>
     )

@@ -106,13 +106,7 @@ const Button = styled.button`
         background-color: #e8e4e4;
     }
 `
-const Product = ({category, filter, sort}) => {
-    const [products, setProducts] = useState([])
-    const [filteredProducts, setFilteredProducts] = useState([])
-
-    useEffect(() => {
-
-    }, [category])
+const Product = () => {
 
     return (
         <Container>
