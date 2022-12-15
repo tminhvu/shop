@@ -35,6 +35,11 @@ const Button = styled.button`
     cursor: pointer;
     color: gray;
     font-weight: 600;
+
+    &:hover {
+        color: black;
+        background-color: lightgray;
+    }
 `
 
 const CategoryItem = ({ item }) => {

@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Product from './Product'
+import {popularProducts} from '../data'
 
 const Container = styled.div`
     padding: 20px;
@@ -22,7 +23,14 @@ const Products = ({ category, filters, sort }) => {
                         `http://localhost:5000/api/products?category=${category}`
                         : "http://localhost:5000/api/products")
                 setProducts(res.data)
-            } catch (err) { }
+            } catch (err) {
+                setProducts(
+                    category ?
+                    popularProducts.filter((item) => {
+                            return item.categories.includes(category)
+                        })
+                    : popularProducts)
+            }
         }
         getProducts()
     }, [category])
@@ -32,7 +40,7 @@ const Products = ({ category, filters, sort }) => {
             setFilteredProducts(
                 products.filter((item) =>
                     Object.entries(filters).every(([key, value]) =>
-                        item[key].includes(value)
+                        item[key] ? item[key].includes(value.toLowerCase()) : item[key]
                     )
                 )
             );
