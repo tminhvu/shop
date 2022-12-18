@@ -35,8 +35,7 @@ const Option = styled.option`
 
 `
 const ProductList = () => {
-    const address = useLocation().pathname
-    const category = address.split("/")[2]
+    const category = useLocation().search.split('=')[1]
 
     const [filters, setFilters] = useState({})
     const [sort, setSort] = useState('newest')
@@ -58,7 +57,7 @@ const ProductList = () => {
         <Container>
             <Announcement />
             <NavBar />
-            <Title>Dresses</Title>
+            <Title>{category ? category.toUpperCase() : 'ALL PRODUCTS'}</Title>
             <FilterContainer>
                 <Filter>
                     <FilterText> Filter Producsts </FilterText>
