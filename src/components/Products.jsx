@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Product from './Product'
-import {popularProducts} from '../data'
+import { popularProducts } from '../data'
+import { publicRequest } from '../requestMethod'
 
 const Container = styled.div`
     padding: 20px;
@@ -16,23 +16,14 @@ const Products = ({ category, filters, sort }) => {
     const [filteredProducts, setFilteredProducts] = useState([])
 
     useEffect(() => {
-        const getProducts = async () => {
-            try {
-                const res = await axios.get(
-                    category ?
-                        `http://localhost:5000/api/products?category=${category}`
-                        : "http://localhost:5000/api/products")
-                setProducts(res.data)
-            } catch (err) {
-                setProducts(
-                    category ?
-                    popularProducts.filter((item) => {
-                            return item.categories.includes(category)
-                        })
-                    : popularProducts)
-            }
-        }
-        getProducts()
+        publicRequest.get(category ? "products?category=" + category : "products").then((res) => {
+
+            setProducts(res.data)
+        }).catch(() => {
+            setProducts(category ? popularProducts.filter((item) => {
+                return item.categories.includes(category)
+            }) : popularProducts)
+        })
     }, [category])
 
     useEffect(() => {
