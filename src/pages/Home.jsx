@@ -36,7 +36,7 @@ const Home = () => {
             <NavBar />
             <Slider />
             <Categories />
-            <Products />
+            <Products atHome={true} />
             <Wrapper>
                 <Link to='/products'>
                     <Button>SEE ALL</Button>
