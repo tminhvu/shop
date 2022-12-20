@@ -1,3 +1,5 @@
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import { mobile } from '../responsive.js'
 
@@ -55,14 +57,39 @@ const Link = styled.a`
     }
 `
 const Login = () => {
+    const [userInfo, setUserInfo] = useState({})
+
+    const navigate = useNavigate()
+    const handleSignIn = () => {
+        const registered = localStorage.getItem(userInfo.username)
+
+        if (registered && JSON.parse(registered).password === userInfo.password) {
+            alert('Loggin successful')
+            localStorage.setItem('loggedIn', userInfo.username)
+            navigate('/')
+        } else
+            alert('Username does not exist or password is incorrect')
+    }
     return (
         <Container>
             <Wrapper>
                 <Title>SIGN IN</Title>
                 <Form>
-                    <Input placeholder="Username" />
-                    <Input placeholder="Password" />
-                    <Button>SIGN IN</Button>
+                    <Input placeholder="Username"
+                        onChange={(e) => {
+                            setUserInfo(old => {
+                                old.username = e.target.value
+                                return old
+                            })
+                        }} />
+                    <Input placeholder="Password"
+                        onChange={(e) => {
+                            setUserInfo(old => {
+                                old.password = e.target.value
+                                return old
+                            })
+                        }} />
+                    <Button onClick={handleSignIn}>SIGN IN</Button>
                     <Link>FORGOT PASSWORD</Link>
                     <Link>CREATE NEW ACCOUNT</Link>
                 </Form>
