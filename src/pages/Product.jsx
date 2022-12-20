@@ -1,17 +1,12 @@
 import { Add, RemoveOutlined } from "@material-ui/icons"
 import { useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
 import styled from "styled-components"
 import Announcement from "../components/Announcement"
 import Footer from "../components/Footer"
 import NavBar from "../components/NavBar"
 import Newsletter from "../components/Newsletter"
-
-const product = {
-    img: "link",
-    title: "title",
-    desc: "desc",
-    price: "5"
-}
+import { popularProducts } from "../data.js"
 
 const Container = styled.div`
 
@@ -65,7 +60,9 @@ const FilterColor = styled.div`
     border-radius: 50%;
     margin: 0px 5px;
     cursor: pointer;
+    border: solid black 1px;
     background-color: ${props => props.color};
+    border: ${props => props.chosen ? 'solid teal 3px' : 'solid gray 1px'}
 `
 const FilterSize = styled.select`
     padding: 5px;
@@ -107,6 +104,45 @@ const Button = styled.button`
     }
 `
 const Product = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    })
+
+    const address = useLocation().pathname
+    const id = address.split("/")[2]
+
+    const [product, setProduct] = useState({})
+
+    useEffect(() => {
+        setProduct(popularProducts.find(e => e._id === id))
+    }, [id])
+
+    const [amount, setAmount] = useState(1)
+
+    const [color, setColor] = useState()
+    const [size, setSize] = useState()
+
+    useEffect(() => {
+        setColor(product.color ? product.color[0] : '')
+        setSize(product.size ? product.size[0] : '')
+    }, [product])
+
+    const handleAddToCart = () => {
+        const loggedIn = localStorage.getItem('loggedIn')
+
+        if (loggedIn) {
+            const user = JSON.parse(localStorage.getItem(loggedIn))
+            const existingItem = user?.cart
+
+            if (existingItem)
+                localStorage.setItem(loggedIn, JSON.stringify({ ...user, cart: [...existingItem, { _id: id, size: size, color: color, amount: amount }] }))
+            else
+                localStorage.setItem(loggedIn, JSON.stringify({ ...user, cart: [{ _id: id, size: size, color: color, amount: amount }] }))
+
+            alert('Item added to cart')
+        } else
+            alert('Login first')
+    }
 
     return (
         <Container>
@@ -126,29 +162,34 @@ const Product = () => {
                     <FilterContainer>
                         <Filter>
                             <FilterTitle>Color</FilterTitle>
-                            <FilterColor color="black" />
-                            <FilterColor color="darkblue" />
-                            <FilterColor color="gray" />
+                            {product.color?.map((c) => (
+                                <FilterColor color={c} key={c}
+                                    onClick={(e) => {
+                                        setColor(e.target.attributes.color.value)
+                                    }}
+                                    chosen={color === c}
+                                />
+                            ))}
                         </Filter>
                         <Filter>
                             <FilterTitle>Size</FilterTitle>
-                            <FilterSize>
-                                <FilterSizeOption>XS</FilterSizeOption>
-                                <FilterSizeOption>S</FilterSizeOption>
-                                <FilterSizeOption>M</FilterSizeOption>
-                                <FilterSizeOption>L</FilterSizeOption>
-                                <FilterSizeOption>XL</FilterSizeOption>
+                            <FilterSize onChange={(e) => {
+                                setSize(e.target.value)
+                            }}>
+                                {product.size?.map((size) => (
+                                    <FilterSizeOption key={size}>{size.toUpperCase()}</FilterSizeOption>
+                                ))}
                             </FilterSize>
                         </Filter>
                     </FilterContainer>
 
                     <AddContainer>
                         <AmountContainer>
-                            <RemoveOutlined />
-                            <Amount>1</Amount>
-                            <Add />
+                            <RemoveOutlined onClick={() => setAmount((old) => old > 1 ? old - 1 : 1)} />
+                            <Amount>{amount}</Amount>
+                            <Add onClick={() => setAmount((old) => old + 1)} />
                         </AmountContainer>
-                        <Button>Add to cart</Button>
+                        <Button onClick={handleAddToCart}>Add to cart</Button>
                     </AddContainer>
                 </InfoContainer>
             </Wrapper>
