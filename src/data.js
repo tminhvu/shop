@@ -59,7 +59,8 @@ export const popularProducts = [
         categories: ['shirt', 'man'],
         size: ["m", "l", "xl"],
         color: ["white", "black"],
-        price: 20
+        price: 20,
+        createdAt: "1/12/2022"
     },
     {
         _id: "2",
@@ -69,7 +70,8 @@ export const popularProducts = [
         categories: ['jacket', 'woman'],
         size: ["m", "l", "xl"],
         color: ["brown", "green"],
-        price: 40
+        price: 40,
+        createdAt: "3/1/2022"
     },
     {
         _id: "3",
@@ -79,7 +81,8 @@ export const popularProducts = [
         categories: ['shirt', 'man'],
         size: ["m", "l", "xl"],
         color: ["red", "green"],
-        price: 20
+        price: 20,
+        createdAt: "12/1/2022"
     },
     {
         _id: "4",
@@ -89,7 +92,8 @@ export const popularProducts = [
         categories: ['cap', 'man'],
         size: ["m", "l", "xl"],
         color: ["gray", "red"],
-        price: 10
+        price: 10,
+        createdAt: "12/12/2022"
     },
     {
         _id: "5",
@@ -99,7 +103,8 @@ export const popularProducts = [
         categories: ['bag', 'man'],
         size: ["m", "l", "xl"],
         color: ["gray", "yellow"],
-        price: 30
+        price: 30,
+        createdAt: "2/12/2022"
     },
     {
         _id: "6",
@@ -109,7 +114,8 @@ export const popularProducts = [
         categories: ['cap', 'man'],
         size: ["m", "l", "xl"],
         color: ["gray", "yellow"],
-        price: 10
+        price: 10,
+        createdAt: "6/12/2022"
     },
     {
         _id: "8",
@@ -119,7 +125,8 @@ export const popularProducts = [
         categories: ['shirt', 'man'],
         size: ["m", "l", "xl"],
         color: ["green", "blue"],
-        price: 20
+        price: 20,
+        createdAt: "7/12/2022"
     },
     {
         _id: "9",
@@ -129,7 +136,8 @@ export const popularProducts = [
         categories: ['jacket', 'woman'],
         size: ["m", "l", "xl"],
         color: ["brown", "red"],
-        price: 40
+        price: 40,
+        createdAt: "8/12/2022"
     },
     {
         _id: "10",
@@ -137,9 +145,10 @@ export const popularProducts = [
         title: "Shoe",
         desc: "a shoe",
         categories: ['shoe', 'man'],
-        size: ["42"],
+        size: ["l"],
         color: ["black"],
-        price: 30
+        price: 30,
+        createdAt: "9/12/2022"
     },
     {
         _id: "11",
@@ -148,8 +157,9 @@ export const popularProducts = [
         desc: "a t shirt",
         price: 20,
         color: ["gray"],
-        size: ["L"],
-        categories: ['shirt', 'man']
+        size: ["l"],
+        categories: ['shirt', 'man'],
+        createdAt: "9/2/2022"
     }
 ]
 
