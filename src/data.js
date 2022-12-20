@@ -57,8 +57,8 @@ export const popularProducts = [
         title: "tshirt crusher",
         desc: "a tshirt",
         categories: ['shirt', 'man'],
-        size: ["m","l","xl"],
-        color: ["white","black"],
+        size: ["m", "l", "xl"],
+        color: ["white", "black"],
         price: 20
     },
     {
@@ -67,8 +67,8 @@ export const popularProducts = [
         title: "jacket woman",
         desc: "a jacket",
         categories: ['jacket', 'woman'],
-        size: ["m","l","xl"],
-        color: ["brown","green"],
+        size: ["m", "l", "xl"],
+        color: ["brown", "green"],
         price: 40
     },
     {
@@ -77,8 +77,8 @@ export const popularProducts = [
         title: "shirt color",
         desc: "a colorful shirt",
         categories: ['shirt', 'man'],
-        size: ["m","l","xl"],
-        color: ["red","green"],
+        size: ["m", "l", "xl"],
+        color: ["red", "green"],
         price: 20
     },
     {
@@ -87,8 +87,8 @@ export const popularProducts = [
         title: "cap dog",
         desc: "a cap with dog",
         categories: ['cap', 'man'],
-        size: ["m","l","xl"],
-        color: ["gray","red"],
+        size: ["m", "l", "xl"],
+        color: ["gray", "red"],
         price: 10
     },
     {
@@ -97,8 +97,8 @@ export const popularProducts = [
         title: "tote bag",
         desc: "a tote bag",
         categories: ['bag', 'man'],
-        size: ["m","l","xl"],
-        color: ["gray","yellow"],
+        size: ["m", "l", "xl"],
+        color: ["gray", "yellow"],
         price: 30
     },
     {
@@ -107,8 +107,8 @@ export const popularProducts = [
         title: "cap dog 2",
         desc: "a cap with dog",
         categories: ['cap', 'man'],
-        size: ["m","l","xl"],
-        color: ["gray","yellow"],
+        size: ["m", "l", "xl"],
+        color: ["gray", "yellow"],
         price: 10
     },
     {
@@ -117,8 +117,8 @@ export const popularProducts = [
         title: "shirt color 2",
         desc: "a colorful shirt",
         categories: ['shirt', 'man'],
-        size: ["m","l","xl"],
-        color: ["green","blue"],
+        size: ["m", "l", "xl"],
+        color: ["green", "blue"],
         price: 20
     },
     {
@@ -127,10 +127,30 @@ export const popularProducts = [
         title: "jacket woman 2",
         desc: "a jacket",
         categories: ['jacket', 'woman'],
-        size: ["m","l","xl"],
-        color: ["brown","red"],
+        size: ["m", "l", "xl"],
+        color: ["brown", "red"],
         price: 40
     },
+    {
+        _id: "10",
+        img: "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A",
+        title: "Shoe",
+        desc: "a shoe",
+        categories: ['shoe', 'man'],
+        size: ["42"],
+        color: ["black"],
+        price: 30
+    },
+    {
+        _id: "11",
+        img: "https://i.pinimg.com/originals/2d/af/f8/2daff8e0823e51dd752704a47d5b795c.png",
+        title: "t-shirt",
+        desc: "a t shirt",
+        price: 20,
+        color: ["gray"],
+        size: ["L"],
+        categories: ['shirt', 'man']
+    }
 ]
 
 export const paymentImage = "https://i.ibb.co/Qfvn4z6/payment.png"
