@@ -38,7 +38,9 @@ const ProductList = () => {
     useEffect(() => {
         window.scrollTo(0, 0)
     })
-    const category = useLocation().search.split('=')[1]
+    const urlQueries =  useLocation().search.substring(1).split('&')
+    const category = urlQueries.find(e=> e.includes('category')).split('=')[1]
+    //const category = useLocation().search.split('=')[1]
 
     const [filters, setFilters] = useState({})
     const [sort, setSort] = useState('newest')
