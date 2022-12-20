@@ -13,7 +13,7 @@ const Container = styled.div`
 const Products = ({ category, filters, sort, atHome, searchKey }) => {
     const [products, setProducts] = useState([...popularProducts])
     const [filteredProducts, setFilteredProducts] = useState([])
-console.log(searchKey)
+
     useEffect(() => {
         category && setProducts(popularProducts.filter((item) => {
             return item.categories.includes(category)
@@ -28,16 +28,20 @@ console.log(searchKey)
             color: searchKey
         }
 
-        searchKey && setProducts(() => {
-            return popularProducts.filter((item) => {
-                let contains = false
-                for (const [key, value] of Object.entries(searchFields)) {
-                    if (item[key].includes(value))
-                        contains = true
-                }
-                return contains
+        if (searchKey !== undefined && searchKey !== '')
+            setProducts(() => {
+                return popularProducts.filter((item) => {
+                    let contains = false
+                    for (const [key, value] of Object.entries(searchFields)) {
+                        if (item[key].includes(value))
+                            contains = true
+                    }
+                    return contains
+                })
             })
-        })
+        else if (searchKey !== undefined && searchKey === '') {
+            setProducts(popularProducts)
+        }
     }, [searchKey])
 
     useEffect(() => {
