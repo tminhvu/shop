@@ -55,7 +55,7 @@ const MenuItem = styled.div`
 
 const NavBar = () => {
     const loggedIn = localStorage.getItem('loggedIn')
-    const cartNumber = JSON.parse(localStorage.getItem(loggedIn))?.cart.length
+    const cartAmount = JSON.parse(localStorage.getItem(loggedIn))?.cart.length
 
     return (
         <Container>
@@ -81,7 +81,7 @@ const NavBar = () => {
                     </Link>
                     <Link to='/cart' style={linkStyle}>
                         <MenuItem>
-                            <Badge badgeContent={cartNumber} color="primary" overlap="rectangular">
+                            <Badge badgeContent={cartAmount} color="primary" overlap="rectangular">
                                 <ShoppingCartOutlined />
                             </Badge>
                         </MenuItem>
