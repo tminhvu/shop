@@ -1,29 +1,12 @@
 import { Add, Remove } from "@material-ui/icons"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import Announcement from "../components/Announcement"
 import Footer from "../components/Footer"
 import NavBar from "../components/NavBar"
+import { popularProducts } from "../data"
 
-const products = [
-    {
-        img: "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A",
-        name: "Shoe",
-        id: "29348489345",
-        price: 30,
-        color: "black",
-        size: 42,
-        amount: 1
-    },
-    {
-        img: "https://i.pinimg.com/originals/2d/af/f8/2daff8e0823e51dd752704a47d5b795c.png",
-        name: "t-shirt",
-        id: "29348489349",
-        price: 20,
-        color: "gray",
-        size: "L",
-        amount: 2
-    },
-]
 const Container = styled.div``
 const Wrapper = styled.div`
     padding: 20px;
@@ -79,12 +62,13 @@ const Details = styled.div`
     flex-direction: column;
     justify-content: space-around;
 `
-const ProductName = styled.span` `
+const ProductTitle = styled.span` `
 const ProductId = styled.span` `
 const ProductColor = styled.div`
     height: 20px;
     width: 20px;
     border-radius: 50px;
+    border: solid teal 1px;
     background-color: ${props => props.color};
 `
 const ProductSize = styled.span` `
@@ -144,6 +128,42 @@ const Button = styled.button`
     cursor: pointer;
 `
 const Cart = () => {
+    const [cart, setCart] = useState(() => {
+        const loggedIn = localStorage.getItem('loggedIn')
+        const cart = JSON.parse(localStorage.getItem(loggedIn))?.cart
+
+        let products
+
+        cart?.forEach(element => {
+            const product = popularProducts.find(e => e._id === element._id)
+
+            const img = product.img
+            const title = product.title
+            const price = product.price
+
+            if (products)
+                products = [...products, { img: img, title: title, price: price, ...element }]
+            else
+                products = [{ img: img, title: title, price: price, ...element }]
+        });
+
+        return products.sort((a, b) => a._id - b._id)
+    })
+
+    const [sum, setSum] = useState(0)
+    const shipping = 0
+    const discount = 0
+
+    useEffect(() => {
+        let sum = 0
+        cart.forEach(product => {
+            sum += product.price * product.amount
+        })
+        setSum(sum)
+    }, [cart])
+
+    const navigate = useNavigate()
+
     return (
         <Container>
             <Announcement />
@@ -151,23 +171,23 @@ const Cart = () => {
             <Wrapper>
                 <Title> YOUR CART </Title>
                 <Top>
-                    <TopButton>CONTINUE SHOPPING</TopButton>
+                    <TopButton onClick={() => navigate('/products')}>CONTINUE SHOPPING</TopButton>
                     <TopTexts>
-                        <TopText>Shopping cart(1)</TopText>
-                        <TopText>Your Wishlist(0)</TopText>
+                        <TopText>Shopping cart({cart.length})</TopText>
+                        <TopText onClick={()=>{alert('wishlist missing')}}>Your Wishlist(0)</TopText>
                     </TopTexts>
-                    <TopButton type="filled">CHECKOUT NOW</TopButton>
+                    <TopButton type="filled" onClick={()=>{alert('payment method missing')}}>CHECKOUT NOW</TopButton>
                 </Top>
                 <Bottom>
                     <Info>
-                        {products.map(product => (
-                            <>
-                                <Product>
+                        {cart?.map(product => (
+                            <div key={Math.random()}>
+                                <Product key={Math.random()}>
                                     <ProductDetail>
                                         <Image src={product.img}></Image>
                                         <Details>
-                                            <ProductName><b>Product:</b> {product.name}</ProductName>
-                                            <ProductId><b>ID:</b> {product.id}</ProductId>
+                                            <ProductTitle><b>Product:</b> {product.title}</ProductTitle>
+                                            <ProductId><b>ID:</b> {product._id}</ProductId>
                                             <ProductColor color={product.color} />
                                             <ProductSize><b>Size:</b> {product.size}</ProductSize>
                                         </Details>
@@ -175,36 +195,40 @@ const Cart = () => {
 
                                     <PriceDetail>
                                         <ProductAmountContainer>
-                                            <Add />
-                                            <ProductAmount>{product.amount}</ProductAmount>
                                             <Remove />
+                                            <ProductAmount>{product.amount}</ProductAmount>
+                                            <Add onClick={() => {
+                                                setCart((oldCart) => {
+                                                    return [...oldCart.filter((item) => item._id !== product._id), { ...product, amount: product.amount + 1 }].sort((a, b) => a._id - b._id)
+                                                })
+                                            }} />
                                         </ProductAmountContainer>
                                         <ProductPrice>${product.price}</ProductPrice>
                                     </PriceDetail>
                                 </Product>
                                 <Hr />
-                            </>
+                            </div>
                         ))}
                     </Info>
                     <Summary>
                         <SummaryTitle>ODER SUMMARY</SummaryTitle>
                         <SummaryItem>
                             <SummaryItemText>Subtotal</SummaryItemText>
-                            <SummaryItemPrice>$60</SummaryItemPrice>
+                            <SummaryItemPrice>${sum}</SummaryItemPrice>
                         </SummaryItem>
                         <SummaryItem>
                             <SummaryItemText>Estimated shipping</SummaryItemText>
-                            <SummaryItemPrice>$2</SummaryItemPrice>
+                            <SummaryItemPrice>${shipping}</SummaryItemPrice>
                         </SummaryItem>
                         <SummaryItem>
                             <SummaryItemText>Shipping discount</SummaryItemText>
-                            <SummaryItemPrice>-$1</SummaryItemPrice>
+                            <SummaryItemPrice>${discount}</SummaryItemPrice>
                         </SummaryItem>
                         <SummaryItem type="total">
                             <SummaryItemText>Total</SummaryItemText>
-                            <SummaryItemPrice>$61</SummaryItemPrice>
+                            <SummaryItemPrice>${sum + shipping + discount}</SummaryItemPrice>
                         </SummaryItem>
-                        <Button>CHECKOUT NOW</Button>
+                        <Button onClick={()=>{alert('payment method missing')}}>CHECKOUT NOW</Button>
                     </Summary>
                 </Bottom>
             </Wrapper>
