@@ -127,6 +127,7 @@ const Product = () => {
         setSize(product.size ? product.size[0] : '')
     }, [product])
 
+    const [notifyRerender, setNotifyRerender] = useState(false)
     const handleAddToCart = () => {
         const loggedIn = localStorage.getItem('loggedIn')
 
@@ -139,6 +140,7 @@ const Product = () => {
             else
                 localStorage.setItem(loggedIn, JSON.stringify({ ...user, cart: [{ _id: id, size: size, color: color, amount: amount }] }))
 
+            setNotifyRerender(!notifyRerender)
             alert('Item added to cart')
         } else
             alert('Login first')
@@ -147,7 +149,7 @@ const Product = () => {
     return (
         <Container>
             <Announcement />
-            <NavBar />
+            <NavBar notifyRerender={notifyRerender}/>
             <Wrapper>
                 <ImageContainer>
                     <Image src={product.img} />
