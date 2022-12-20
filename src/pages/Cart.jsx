@@ -152,7 +152,7 @@ const Cart = () => {
                 ]
         });
 
-        return products.sort((a, b) => a._id - b._id)
+        return products?.sort((a, b) => a._id - b._id)
     })
 
     const [sum, setSum] = useState(0)
@@ -161,7 +161,7 @@ const Cart = () => {
 
     useEffect(() => {
         let sum = 0
-        cart.forEach(product => {
+        cart?.forEach(product => {
             sum += product.price * product.amount
         })
         setSum(sum)
@@ -212,6 +212,9 @@ const Cart = () => {
 
     useEffect(() => {
         const addCartToLocalStorage = () => {
+            if (!cart)
+                return
+
             const loggedIn = localStorage.getItem('loggedIn')
 
             const user = JSON.parse(localStorage.getItem(loggedIn))
@@ -236,7 +239,7 @@ const Cart = () => {
                 <Top>
                     <Link to='/products'><TopButton>CONTINUE SHOPPING</TopButton></Link>
                     <TopTexts>
-                        <TopText>Shopping cart({cart.length})</TopText>
+                        <TopText>Shopping cart({cart?.length})</TopText>
                         <TopText onClick={() => { alert('wishlist missing') }}>Your Wishlist(0)</TopText>
                     </TopTexts>
                     <TopButton type="filled" onClick={() => { alert('payment method missing') }}>CHECKOUT NOW</TopButton>

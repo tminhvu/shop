@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { Search, ShoppingCartOutlined } from '@material-ui/icons'
-import { Badge } from "@material-ui/core"
+import { Avatar, Badge } from "@material-ui/core"
 import { Link, redirect, useNavigate } from "react-router-dom"
 import { linkStyle } from "../linkstyle.js"
 import { useState } from "react"
@@ -57,6 +57,25 @@ const SearchInput = styled.input`
     border: none;
 `
 
+const Username = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5fbfd;
+    padding: 2px 10px;
+    border-radius: 3px;
+    color: teal;
+    font-weight: 600;
+    text-decoration: underline;
+`
+
+const Logout = styled.button`
+    background-color: #f5fbfd;
+    border: solid teal 1px;
+    font-size: 12px;
+    cursor: pointer;
+`
+
 const NavBar = () => {
     const loggedIn = localStorage.getItem('loggedIn')
     const cartAmount = JSON.parse(localStorage.getItem(loggedIn))?.cart.length
@@ -67,6 +86,10 @@ const NavBar = () => {
 
     const search = () => {
         navigate('/products?search=' + searchKey)
+    }
+
+    const handleLogOut = () => {
+        localStorage.removeItem('loggedIn')
     }
 
     return (
@@ -95,12 +118,24 @@ const NavBar = () => {
                     </Link>
                 </Center>
                 <Right>
-                    <Link to='/register' style={linkStyle}>
-                        <MenuItem>Register</MenuItem>
-                    </Link>
-                    <Link to='/login' style={linkStyle}>
-                        <MenuItem>Log in</MenuItem>
-                    </Link>
+                    {loggedIn ?
+                        <>
+                            <Username>
+                                <Avatar style={{ height: '23px', width: '23px', color: 'teal', marginRight: '5px' }} />
+                                {loggedIn}
+                            </Username>
+                            <Logout onClick={() => handleLogOut()}>Log out</Logout>
+                        </> :
+                        <>
+                            <Link to='/register' style={linkStyle}>
+                                <MenuItem>Register</MenuItem>
+                            </Link>
+                            <Link to='/login' style={linkStyle}>
+                                <MenuItem>Log in</MenuItem>
+                            </Link>
+                        </>
+
+                    }
                     <Link to='/cart' style={linkStyle}>
                         <MenuItem>
                             <Badge badgeContent={cartAmount} color="primary" overlap="rectangular">
