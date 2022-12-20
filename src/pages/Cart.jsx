@@ -1,6 +1,6 @@
 import { Add, Remove } from "@material-ui/icons"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import Announcement from "../components/Announcement"
 import Footer from "../components/Footer"
@@ -167,11 +167,9 @@ const Cart = () => {
         setSum(sum)
     }, [cart])
 
-    const navigate = useNavigate()
-
     const [notifyRerender, setNotifyRerender] = useState(false)
 
-    const sortCondition = (a,b) => {
+    const sortCondition = (a, b) => {
         if (a._id !== b._id) {
             return a._id - b._id
         } else {
@@ -236,7 +234,7 @@ const Cart = () => {
             <Wrapper>
                 <Title> YOUR CART </Title>
                 <Top>
-                    <TopButton onClick={() => navigate('/products')}>CONTINUE SHOPPING</TopButton>
+                    <Link to='/products'><TopButton>CONTINUE SHOPPING</TopButton></Link>
                     <TopTexts>
                         <TopText>Shopping cart({cart.length})</TopText>
                         <TopText onClick={() => { alert('wishlist missing') }}>Your Wishlist(0)</TopText>
