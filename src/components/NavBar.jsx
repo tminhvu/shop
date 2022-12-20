@@ -1,8 +1,9 @@
 import styled from "styled-components"
 import { Search, ShoppingCartOutlined } from '@material-ui/icons'
 import { Badge } from "@material-ui/core"
-import { Link } from "react-router-dom"
+import { Link, redirect, useNavigate } from "react-router-dom"
 import { linkStyle } from "../linkstyle.js"
+import { useState } from "react"
 
 const Container = styled.div`
     height: 60px;
@@ -29,9 +30,7 @@ const SearchContainter = styled.div`
     margin-left: 25px;
     padding: 5px;
 `
-const Input = styled.input`
-    border:none;
-`
+
 const Logo = styled.h1`
     font-weight: bold;
 `
@@ -53,9 +52,22 @@ const MenuItem = styled.div`
     margin-left: 25px;
 `
 
+const SearchInput = styled.input`
+    outline: none;
+    border: none;
+`
+
 const NavBar = () => {
     const loggedIn = localStorage.getItem('loggedIn')
     const cartAmount = JSON.parse(localStorage.getItem(loggedIn))?.cart.length
+
+    const [searchKey, setSearchKey] = useState('')
+
+    const navigate = useNavigate()
+
+    const search = () => {
+        navigate('/products?search=' + searchKey)
+    }
 
     return (
         <Container>
@@ -63,8 +75,18 @@ const NavBar = () => {
                 <Left>
                     <Language>EN</Language>
                     <SearchContainter>
-                        <Input />
-                        <Search style={{ color: "gray", fontSize: 16 }} />
+                        <SearchInput onChange={(e) => {
+                            setSearchKey(e.target.value)
+                        }}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter')
+                                    search()
+                            }}
+                        />
+                        <Search style={{ color: "gray", fontSize: 16 }}
+                            onClick={() => {
+                                search()
+                            }} />
                     </SearchContainter>
                 </Left>
                 <Center>

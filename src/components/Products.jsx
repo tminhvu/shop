@@ -10,32 +10,51 @@ const Container = styled.div`
     justify-content: space-between
 `
 
-const Products = ({ category, filters, sort, atHome }) => {
-    const [products, setProducts] = useState([])
+const Products = ({ category, filters, sort, atHome, searchKey }) => {
+    const [products, setProducts] = useState([...popularProducts])
     const [filteredProducts, setFilteredProducts] = useState([])
-
+console.log(searchKey)
     useEffect(() => {
-        setProducts(category ? popularProducts.filter((item) => {
+        category && setProducts(popularProducts.filter((item) => {
             return item.categories.includes(category)
-        }) : popularProducts)
+        }))
     }, [category])
 
     useEffect(() => {
-        category &&
-            setFilteredProducts(
-                products.filter((item) =>
-                    Object.entries(filters).every(([key, value]) =>
-                        item[key] ? item[key].includes(value.toLowerCase()) : item[key]
-                    )
+        const searchFields = {
+            title: searchKey,
+            desc: searchKey,
+            categories: searchKey,
+            color: searchKey
+        }
+
+        searchKey && setProducts(() => {
+            return popularProducts.filter((item) => {
+                let contains = false
+                for (const [key, value] of Object.entries(searchFields)) {
+                    if (item[key].includes(value))
+                        contains = true
+                }
+                return contains
+            })
+        })
+    }, [searchKey])
+
+    useEffect(() => {
+        filters && setFilteredProducts(() =>
+            products.filter((item) =>
+                Object.entries(filters).every(([key, value]) =>
+                    item[key]?.includes(value.toLowerCase())
                 )
-            );
-    }, [products, category, filters]);
+            )
+        )
+    }, [products, filters]);
 
     useEffect(() => {
         if (sort === "newest") {
             setFilteredProducts((old) => {
                 return [...old].sort((a, b) => {
-                    return a.createdAt - b.createdAt
+                    return new Date(a.createdAt) - Date.parse(b.createdAt)
                 })
             })
         } else if (sort === "price_asc") {
@@ -53,10 +72,11 @@ const Products = ({ category, filters, sort, atHome }) => {
         }
     }, [sort])
 
+
     const render = () => {
         if (atHome) {
             return products.slice(0, 8).map((item) => <Product item={item} key={Math.random()} />);
-        } else if (category) {
+        } else if (filters) {
             return filteredProducts.map((item) => <Product item={item} key={Math.random()} />)
         } else {
             return products.map((item) => <Product item={item} key={Math.random()} />);
