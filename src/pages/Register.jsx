@@ -1,3 +1,5 @@
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 
 const Container = styled.div`
@@ -46,22 +48,58 @@ const Button = styled.button`
 `
 
 const Register = () => {
+    const [userInfo, setUserInfo] = useState({
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        password: "",
+    })
+
+    const navigate = useNavigate()
+    const handleRegister = () => {
+        localStorage.setItem(userInfo.username, JSON.stringify(userInfo))
+        alert('User added')
+        navigate('/')
+    }
+
     return (
         <Container>
             <Wrapper>
                 <Title>CREATE AN ACCOUNT</Title>
                 <Form>
-                    <Input placeholder="Name" />
-                    <Input placeholder="Last name" />
-                    <Input placeholder="Username" />
-                    <Input placeholder="Email" />
-                    <Input placeholder="Password" />
-                    <Input placeholder="Confirm password" />
+                    <Input placeholder="First name"
+                        onChange={(e) => setUserInfo(old => {
+                            old.firstName = e.target.value
+                            return old
+                        })} />
+                    <Input placeholder="Last name"
+                        onChange={(e) => setUserInfo(old => {
+                            old.lastName = e.target.value
+                            return old
+                        })} />
+
+                    <Input placeholder="Username"
+                        onChange={(e) => setUserInfo(old => {
+                            old.username = e.target.value
+                            return old
+                        })} />
+                    <Input placeholder="Email" onChange={(e) => setUserInfo(old => {
+                        old.email = e.target.value
+                        return old
+                    })} />
+                    <Input placeholder="Password" onChange={(e) => setUserInfo(old => {
+                        old.password = e.target.value
+                        return old
+                    })} />
+                    <Input placeholder="Confirm password" onChange={() => {
+                        // TODO: verify password
+                    }} />
                     <Agreement>
                         By creating an account, I consent to the processing of my personal
                         data in accordance with the <b>PRIVACY POLICY</b>
                     </Agreement>
-                    <Button>Register</Button>
+                    <Button onClick={handleRegister}>Register</Button>
                 </Form>
             </Wrapper>
         </Container>
