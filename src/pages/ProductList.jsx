@@ -38,9 +38,9 @@ const ProductList = () => {
     useEffect(() => {
         window.scrollTo(0, 0)
     })
-    const urlQueries =  useLocation().search.substring(1).split('&')
-    const category = urlQueries.find(e=> e.includes('category')).split('=')[1]
-    //const category = useLocation().search.split('=')[1]
+    const urlQueries = useLocation().search.substring(1)?.split('&')
+    const category = urlQueries.find(e => e.includes('category'))?.split('=')[1]
+    const searchKey = urlQueries.find(e => e.includes('search'))?.split('=')[1]
 
     const [filters, setFilters] = useState({})
     const [sort, setSort] = useState('newest')
@@ -48,21 +48,39 @@ const ProductList = () => {
     const handleSetFilters = (e) => {
         const value = e.target.value
         const name = e.target.name
-        setFilters({
-            ...filters,
-            [name]: value,
-        })
+        if (value !== '')
+            setFilters({
+                ...filters,
+                [name]: value,
+            })
+        else {
+            setFilters(() => {
+                let newFilters = { ...filters }
+                delete newFilters[name]
+                return newFilters
+            })
+        }
     }
 
     const handleSetSort = (e) => {
         setSort(e.target.value)
     }
 
+    const title = () => {
+        if (searchKey && category) {
+            return searchKey.toUpperCase() + ' ' + category.toUpperCase()
+        } else if (searchKey) {
+            return searchKey.toUpperCase()
+        } else if (category) {
+            return category.toUpperCase()
+        }
+    }
+
     return (
         <Container>
             <Announcement />
             <NavBar />
-            <Title>{category ? category.toUpperCase() : 'ALL PRODUCTS'}</Title>
+            <Title>{title() || 'ALL PRODUCTS'}</Title>
             <FilterContainer>
                 <Filter>
                     <FilterText> Filter Producsts </FilterText>
@@ -103,7 +121,7 @@ const ProductList = () => {
                 </Filter>
             </FilterContainer>
 
-            <Products category={category} filters={filters} sort={sort} atHome={false} />
+            <Products category={category} filters={filters} sort={sort} atHome={false} searchKey={searchKey} />
             <Newsletter />
             <Footer />
         </Container>
