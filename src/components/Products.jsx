@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Product from './Product'
 import { popularProducts } from '../data'
-import { publicRequest } from '../requestMethod'
 
 const Container = styled.div`
     padding: 20px;
@@ -11,19 +10,14 @@ const Container = styled.div`
     justify-content: space-between
 `
 
-const Products = ({ category, filters, sort }) => {
+const Products = ({ category, filters, sort, atHome }) => {
     const [products, setProducts] = useState([])
     const [filteredProducts, setFilteredProducts] = useState([])
 
     useEffect(() => {
-        publicRequest.get(category ? "products?category=" + category : "products").then((res) => {
-
-            setProducts(res.data)
-        }).catch(() => {
-            setProducts(category ? popularProducts.filter((item) => {
-                return item.categories.includes(category)
-            }) : popularProducts)
-        })
+        setProducts(category ? popularProducts.filter((item) => {
+            return item.categories.includes(category)
+        }) : popularProducts)
     }, [category])
 
     useEffect(() => {
@@ -59,10 +53,19 @@ const Products = ({ category, filters, sort }) => {
         }
     }, [sort])
 
+    const render = () => {
+        if (atHome) {
+            return products.slice(0, 8).map((item) => <Product item={item} key={Math.random()} />);
+        } else if (category) {
+            return filteredProducts.map((item) => <Product item={item} key={Math.random()} />)
+        } else {
+            return products.map((item) => <Product item={item} key={Math.random()} />);
+        }
+    }
+
     return (
         <Container>
-            {category ? filteredProducts.map((item) => <Product item={item} key={Math.random()} />)
-                : products.slice(0, 8).map((item) => <Product item={item} key={Math.random()} />)}
+            {render()}
         </Container>
     )
 }
