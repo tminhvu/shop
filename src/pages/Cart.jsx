@@ -142,9 +142,14 @@ const Cart = () => {
             const price = product.price
 
             if (products)
-                products = [...products, { img: img, title: title, price: price, ...element }]
+                products = [
+                    ...products,
+                    { img: img, title: title, price: price, ...element }
+                ]
             else
-                products = [{ img: img, title: title, price: price, ...element }]
+                products = [
+                    { img: img, title: title, price: price, ...element }
+                ]
         });
 
         return products.sort((a, b) => a._id - b._id)
@@ -164,19 +169,79 @@ const Cart = () => {
 
     const navigate = useNavigate()
 
+    const [notifyRerender, setNotifyRerender] = useState(false)
+
+    const sortCondition = (a,b) => {
+        if (a._id !== b._id) {
+            return a._id - b._id
+        } else {
+            return a.amount - b.amount
+        }
+    }
+    const handleDecreaseItemAmount = (product) => {
+        setCart((oldCart) => {
+            let isLastItem = false
+            const filteredOldCart = oldCart.filter((item) => {
+                if (item === product) {
+                    if (product.amount === 1) {
+                        isLastItem = true
+                    }
+                    return false
+                }
+                return true
+            })
+
+            if (isLastItem) {
+                setNotifyRerender(!notifyRerender)
+                return [...filteredOldCart]
+            }
+
+            return [
+                ...filteredOldCart,
+                { ...product, amount: product.amount - 1 }
+            ].sort(sortCondition)
+        })
+    }
+
+    const handleIncreaseItemAmount = (product) => {
+        setCart((oldCart) => {
+            return [
+                ...oldCart.filter((item) => (item !== product)),
+                { ...product, amount: product.amount + 1 }
+            ].sort(sortCondition)
+        })
+    }
+
+    useEffect(() => {
+        const addCartToLocalStorage = () => {
+            const loggedIn = localStorage.getItem('loggedIn')
+
+            const user = JSON.parse(localStorage.getItem(loggedIn))
+            const existingItem = cart
+
+            localStorage.setItem(loggedIn, JSON.stringify(
+                {
+                    ...user,
+                    cart: [...existingItem]
+                }
+            ))
+        }
+        addCartToLocalStorage()
+    }, [cart])
+
     return (
         <Container>
             <Announcement />
-            <NavBar />
+            <NavBar notifyRerender={notifyRerender} />
             <Wrapper>
                 <Title> YOUR CART </Title>
                 <Top>
                     <TopButton onClick={() => navigate('/products')}>CONTINUE SHOPPING</TopButton>
                     <TopTexts>
                         <TopText>Shopping cart({cart.length})</TopText>
-                        <TopText onClick={()=>{alert('wishlist missing')}}>Your Wishlist(0)</TopText>
+                        <TopText onClick={() => { alert('wishlist missing') }}>Your Wishlist(0)</TopText>
                     </TopTexts>
-                    <TopButton type="filled" onClick={()=>{alert('payment method missing')}}>CHECKOUT NOW</TopButton>
+                    <TopButton type="filled" onClick={() => { alert('payment method missing') }}>CHECKOUT NOW</TopButton>
                 </Top>
                 <Bottom>
                     <Info>
@@ -195,13 +260,15 @@ const Cart = () => {
 
                                     <PriceDetail>
                                         <ProductAmountContainer>
-                                            <Remove />
+                                            <Remove
+                                                onClick={() => {
+                                                    handleDecreaseItemAmount(product)
+                                                }} />
                                             <ProductAmount>{product.amount}</ProductAmount>
-                                            <Add onClick={() => {
-                                                setCart((oldCart) => {
-                                                    return [...oldCart.filter((item) => item._id !== product._id), { ...product, amount: product.amount + 1 }].sort((a, b) => a._id - b._id)
-                                                })
-                                            }} />
+                                            <Add
+                                                onClick={() => {
+                                                    handleIncreaseItemAmount(product)
+                                                }} />
                                         </ProductAmountContainer>
                                         <ProductPrice>${product.price}</ProductPrice>
                                     </PriceDetail>
@@ -228,7 +295,7 @@ const Cart = () => {
                             <SummaryItemText>Total</SummaryItemText>
                             <SummaryItemPrice>${sum + shipping + discount}</SummaryItemPrice>
                         </SummaryItem>
-                        <Button onClick={()=>{alert('payment method missing')}}>CHECKOUT NOW</Button>
+                        <Button onClick={() => { alert('payment method missing') }}>CHECKOUT NOW</Button>
                     </Summary>
                 </Bottom>
             </Wrapper>
