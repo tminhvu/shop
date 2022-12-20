@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import styled from "styled-components"
 import Announcement from "../components/Announcement"
@@ -35,6 +35,9 @@ const Option = styled.option`
 
 `
 const ProductList = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    })
     const category = useLocation().search.split('=')[1]
 
     const [filters, setFilters] = useState({})
@@ -98,7 +101,7 @@ const ProductList = () => {
                 </Filter>
             </FilterContainer>
 
-            <Products category={category} filters={filters} sort={sort} />
+            <Products category={category} filters={filters} sort={sort} atHome={false} />
             <Newsletter />
             <Footer />
         </Container>
